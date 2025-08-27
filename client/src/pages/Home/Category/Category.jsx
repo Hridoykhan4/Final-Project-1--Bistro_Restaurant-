@@ -1,3 +1,4 @@
+// Category.jsx
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -7,6 +8,7 @@ import slide2 from "../../../assets/home/slide2.jpg";
 import slide3 from "../../../assets/home/slide3.jpg";
 import slide4 from "../../../assets/home/slide4.jpg";
 import slide5 from "../../../assets/home/slide5.jpg";
+import SectionTitle from "../../../components/SectionTitle/SectionTitle";
 
 const Category = () => {
   const slides = [
@@ -18,7 +20,12 @@ const Category = () => {
   ];
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 mb-16">
+    <section className="w-full max-w-7xl mx-auto px-4 mb-20 mt-12">
+      <SectionTitle
+        heading="Order Online"
+        subHeading="--- From 11:00am to 10:00pm ---"
+      />
+
       <Swiper
         slidesPerView={2}
         spaceBetween={20}
@@ -33,24 +40,24 @@ const Category = () => {
       >
         {slides.map((slide, i) => (
           <SwiperSlide key={i}>
-            <div className="relative group rounded-2xl overflow-hidden shadow-lg">
+            <div className="relative group rounded-2xl overflow-hidden shadow-xl">
               {/* Image */}
               <img
                 src={slide.img}
                 alt={slide.title}
-                className="w-full h-64 object-cover transform transition-transform duration-700 group-hover:scale-110"
+                className="w-full h-64 object-cover transform transition duration-700 group-hover:scale-110"
               />
-              {/* Overlay */}
-              <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition duration-500"></div>
+              {/* Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent opacity-70 group-hover:opacity-90 transition duration-500"></div>
               {/* Title */}
-              <h2 className="absolute inset-0 flex items-center justify-center text-2xl md:text-3xl font-bold text-white tracking-wide drop-shadow-lg uppercase">
+              <h2 className="absolute bottom-6 left-1/2 -translate-x-1/2 text-2xl md:text-3xl font-extrabold text-white tracking-widest uppercase drop-shadow-lg group-hover:scale-105 transition duration-300">
                 {slide.title}
               </h2>
             </div>
           </SwiperSlide>
         ))}
       </Swiper>
-    </div>
+    </section>
   );
 };
 

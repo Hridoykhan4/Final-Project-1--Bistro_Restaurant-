@@ -11,11 +11,11 @@ const Banner = () => {
   const images = [img1, img2, img3, img4, img5, img6];
 
   return (
-    <div className="w-full  rounded-2xl overflow-hidden shadow-2xl">
+    <section className="w-full rounded-2xl overflow-hidden shadow-2xl">
       <Carousel
         autoPlay
         infiniteLoop
-        interval={4000}
+        interval={5000}
         swipeable
         emulateTouch
         transitionTime={800}
@@ -36,7 +36,7 @@ const Banner = () => {
           </div>
         ))}
       </Carousel>
-    </div>
+    </section>
   );
 };
 
