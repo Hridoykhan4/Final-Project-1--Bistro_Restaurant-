@@ -1,12 +1,25 @@
+// eslint-disable-next-line no-unused-vars
+import { motion } from "framer-motion";
+
 const MenuItem = ({ item }) => {
   const { name, price, recipe, image } = item || {};
+
   return (
-    <div className="flex items-center gap-6 p-4 rounded-2xl shadow-md bg-white hover:shadow-lg transition-all duration-300">
+    <motion.div
+      className="flex items-center gap-6 p-4 rounded-2xl shadow-md bg-white hover:shadow-lg transition-all duration-300"
+      initial={{ opacity: 0, y: 60 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.9, ease: "easeOut", delay: 0.5 }}
+      whileHover={{ scale: 1.02, y: -4 }}
+      whileTap={{ scale: 0.98 }}
+    >
       {/* Image */}
-      <img
+      <motion.img
         className="w-28 h-28 rounded-[40%] object-cover object-center shadow-md"
         src={image}
         alt={name}
+        whileHover={{ rotate: 2 }}
+        transition={{ type: "spring", stiffness: 200 }}
       />
 
       {/* Text Section */}
@@ -19,7 +32,7 @@ const MenuItem = ({ item }) => {
         </div>
         <p className="text-gray-600 text-sm mt-2 leading-relaxed">{recipe}</p>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

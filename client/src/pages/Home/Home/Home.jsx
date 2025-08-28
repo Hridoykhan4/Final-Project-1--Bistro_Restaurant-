@@ -6,8 +6,10 @@ import OurRecommends from "../OurRecommends/OurRecommends";
 import OurSlogan from "../OurSlogan/OurSlogan";
 import PopularMenu from "../PopularMenu/PopularMenu";
 import Testimonials from "../Testimonials/Testimonials";
+import useScrollTo from "../../../hooks/useScrollTo";
 
 const Home = () => {
+  useScrollTo();
   return (
     <section>
       <Helmet>

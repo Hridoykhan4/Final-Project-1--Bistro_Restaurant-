@@ -5,3 +5,11 @@ html{
     scroll-behavior: smooth;
     overflow: scroll;
 }
+
+.react-tabs__tab--selected {
+  @apply bg-gradient-to-r from-indigo-500 to-purple-500 text-white shadow-md scale-105 font-semibold rounded-lg;
+}
+
+.react-tabs__tab {
+  @apply outline-none; 
+}

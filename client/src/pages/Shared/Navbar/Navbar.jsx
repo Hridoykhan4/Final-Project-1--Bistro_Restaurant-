@@ -21,7 +21,7 @@ const Navbar = () => {
         </NavLink>
       </li>
       <li>
-        <NavLink className={navLinkStyle} to="/order">
+        <NavLink className={navLinkStyle} to="/order/salad">
           Order Food
         </NavLink>
       </li>

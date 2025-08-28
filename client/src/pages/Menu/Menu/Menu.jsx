@@ -45,7 +45,7 @@ const Menu = () => {
 
       {/* Dessert Section */}
       <MenuCategory
-        title="Desserts"
+        title="Dessert"
         desc="Sweet delights to end your meal with a smile"
         coverImage={dessertBg}
         items={dessert}
@@ -53,7 +53,7 @@ const Menu = () => {
 
       {/* Soup Section */}
       <MenuCategory
-        title="Soups"
+        title="Soup"
         desc="Warm, comforting, and full of flavor"
         coverImage={soupBg}
         items={soup}
@@ -61,7 +61,7 @@ const Menu = () => {
 
       {/* Salad Section */}
       <MenuCategory
-        title="Salads"
+        title="Salad"
         desc="Fresh, healthy, and crunchy bites"
         coverImage={saladBg}
         items={salad}

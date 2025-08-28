@@ -1,5 +1,6 @@
 import SectionTitle from "../../../components/SectionTitle/SectionTitle";
 import featuredImg from "../../../assets/home/featured.jpg";
+import { Link } from "react-router-dom";
 
 const Featured = () => {
   return (
@@ -42,9 +43,9 @@ const Featured = () => {
             by our master chefs, this dish is not just food — it’s a statement.
           </p>
 
-          <button className="btn mt-6 bg-amber-500 hover:bg-amber-600 border-0 text-white px-6 py-2 rounded-full font-semibold tracking-wide shadow-md hover:shadow-lg transition-transform hover:scale-105">
+          <Link to="/order" className="btn mt-6 bg-amber-500 hover:bg-amber-600 border-0 text-white px-6 py-2 rounded-full font-semibold tracking-wide shadow-md hover:shadow-lg transition-transform hover:scale-105">
             Order Now
-          </button>
+          </Link>
         </div>
       </div>
     </section>
