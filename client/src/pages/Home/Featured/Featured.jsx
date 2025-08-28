@@ -11,7 +11,7 @@ const Featured = () => {
         backgroundRepeat: "no-repeat",
         backgroundAttachment: "fixed",
       }}
-      className="w-full max-w-7xl mx-auto text-white mb-20 mt-12 px-4 rounded-2xl overflow-hidden shadow-2xl"
+      className="w-full max-w-7xl mx-auto text-white mb-10 mt-12 px-4 rounded-2xl overflow-hidden shadow-2xl"
     >
       {/* Section Heading */}
       <SectionTitle
