@@ -5,7 +5,7 @@ const Navbar = () => {
     `px-4 py-2 font-semibold transition ${
       isActive
         ? "text-green-400 font-bold border-b-2 border-green-400"
-        : "text-gray-300 hover:text-green-400"
+        : "text-white hover:text-green-400"
     }`;
 
   const navOptions = (
@@ -13,6 +13,11 @@ const Navbar = () => {
       <li>
         <NavLink className={navLinkStyle} to="/">
           Home
+        </NavLink>
+      </li>
+      <li>
+        <NavLink className={navLinkStyle} to="/contact">
+          Contact Us
         </NavLink>
       </li>
       <li>
@@ -29,20 +34,20 @@ const Navbar = () => {
   );
 
   return (
-    <div className="navbar fixed z-10 backdrop-blur-3xl text-white bg-black/40 shadow-sm">
-      <div className="navbar-start">
+    <div className="navbar fixed z-50 backdrop-blur-3xl text-white bg-black/40 shadow-sm">
+      <div className="navbar-start w-full">
         <Link to="/">
           <span className="font-extrabold text-xl  ">Bistro Boss</span> <br />
           <span className="tracking-widest">Restaurant</span>
         </Link>
       </div>
-      <div className="navbar-center hidden lg:flex">
+      <div className="navbar-center items-end self-end ms-auto hidden lg:flex">
         <ul className="menu menu-horizontal px-1">{navOptions}</ul>
       </div>
-      <div className="navbar-end">
-        <a className="btn">Button</a>
+      <div className="navbar-end w-fit lg:ms-3">
+        <Link className="btn" to="/login">Login</Link>
         <div className="dropdown dropdown-end ms-3">
-          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
+          <div tabIndex={0} role="button" className="btn btn-outline lg:hidden">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5"
@@ -61,7 +66,7 @@ const Navbar = () => {
           </div>
           <ul
             tabIndex={0}
-            className="menu menu-sm dropdown-content text-black bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+            className="menu menu-sm dropdown-content  bg-gray-700 rounded-box z-1 mt-3 w-52 p-2 shadow"
           >
             {navOptions}
           </ul>

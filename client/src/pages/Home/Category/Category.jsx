@@ -24,13 +24,13 @@ const Category = () => {
   // Framer Motion Variants
   const cardVariants = {
     hidden: { opacity: 0, y: 40, scale: 0.95 },
-    visible: { 
-      opacity: 1, 
-      y: 0, 
-      scale: 1, 
-      transition: { duration: 0.6, ease: "easeOut" } 
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: { duration: 0.6, ease: "easeOut" },
     },
-    hover: { scale: 1.05, transition: { duration: 0.3 } }
+    hover: { scale: 1.05, transition: { duration: 0.3 } },
   };
 
   return (
@@ -72,7 +72,7 @@ const Category = () => {
               />
 
               {/* Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent opacity-70 group-hover:opacity-90 transition duration-500"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/60 to-black/80 opacity-70 group-hover:opacity-90 transition duration-500"></div>
 
               {/* Title */}
               <motion.h2
