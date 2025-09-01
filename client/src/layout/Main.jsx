@@ -1,11 +1,12 @@
 import { Outlet, useLocation, useNavigation } from "react-router-dom";
 import Footer from "../pages/Shared/Footer/Footer";
 import Navbar from "../pages/Shared/Navbar/Navbar";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const Main = () => {
   const navigation = useNavigation();
   const { pathname } = useLocation();
-  const noHeaderFooter = pathname.includes("login");
+  const noHeaderFooter = pathname.includes("login") || pathname.includes('signup');
 
   return (
     <>
@@ -16,7 +17,7 @@ const Main = () => {
       )}
       <main className="min-h-[calc(100vh-230px)]">
         {navigation.state === "loading" ? (
-          <p>Loading....</p>
+          <LoadingSpinner></LoadingSpinner>
         ) : (
           <Outlet></Outlet>
         )}

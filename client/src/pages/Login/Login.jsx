@@ -1,45 +1,161 @@
 import { Helmet } from "react-helmet-async";
-import loginImg from "../../assets/others/authentication.gif";
+import loginImg from "../../assets/others/authentication1.png";
+import { useState } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
+import useAuthValue from "../../hooks/useAuthValue";
+import { Link,  useLocation, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import GoogleLoginButton from "../../components/Auth/GoogleLoginButton";
+
 const Login = () => {
+  const [verified, setVerified] = useState(false);
+  const { signIn } = useAuthValue();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location?.state?.from?.pathname || "/";
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const email = form.email.value;
+    const password = form.password.value;
+
+    if (!email || !password) {
+      Swal.fire({
+        title: "Missing fields",
+        text: "Please enter both email and password.",
+        icon: "warning",
+        background: "#fef9c3",
+        color: "#854d0e",
+        confirmButtonColor: "#f59e0b",
+      });
+      return;
+    }
+
+    try {
+      const result = await signIn(email, password);
+      Swal.fire({
+        title: "Welcome back 👋",
+        text: `Hello, ${result.user?.email || "User"}!`,
+        icon: "success",
+        background: "#ecfdf5",
+        color: "#065f46",
+        confirmButtonColor: "#10b981",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+      navigate(from, {replace: true});
+    } catch (err) {
+      Swal.fire({
+        title: "Login failed",
+        text: err.message || "Something went wrong.",
+        icon: "error",
+        background: "#fef2f2",
+        color: "#7f1d1d",
+        confirmButtonColor: "#ef4444",
+      });
+    }
+  };
+
+  const handleVerify = (token) => {
+    if (token) setVerified(true);
+  };
+
   return (
     <section>
       <Helmet>
         <title>Bistro Boss - Login</title>
       </Helmet>
-      <div className="hero bg-base-200 min-h-screen">
-        <div className="hero-content flex-col sm:flex-row">
-          <div className="text-center lg:text-left">
-            <h1 className="text-5xl font-bold">Login now!</h1>
-            <p className="py-6">
-              Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
-              excepturi exercitat
-            </p>
+
+      <div className="hero min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
+        <div className="hero-content flex-col lg:flex-row-reverse gap-10">
+          {/* Image Side */}
+          <div className="hidden lg:flex justify-center items-center w-1/2">
+            <img
+              src={loginImg}
+              alt="Login"
+              className="rounded-xl shadow-xl max-h-[450px] object-cover"
+            />
           </div>
-          <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
-            <form className="card-body">
-              <fieldset className="fieldset">
-                <label className="label">Email</label>
+
+          {/* Form Side */}
+          <div className="card w-full max-w-md bg-white shadow-2xl rounded-2xl p-8">
+            <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">
+              Welcome Back 👋
+            </h2>
+            <p className="text-center text-gray-500 mb-6">
+              Please login to continue to{" "}
+              <span className="font-semibold text-gray-700">Bistro Boss</span>
+            </p>
+
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div>
+                <label className="block mb-1 text-sm font-medium text-gray-700">
+                  Email
+                </label>
                 <input
                   type="email"
                   name="email"
-                  className="input"
-                  placeholder="Email"
+                  required
+                  className="input input-bordered w-full rounded-lg"
+                  placeholder="Enter your email"
                 />
-                <label className="label">Password</label>
+              </div>
+
+              <div>
+                <label className="block mb-1 text-sm font-medium text-gray-700">
+                  Password
+                </label>
                 <input
                   type="password"
                   name="password"
-                  className="input"
-                  placeholder="Password"
+                  required
+                  className="input input-bordered w-full rounded-lg"
+                  placeholder="Enter your password"
                 />
+              </div>
 
-                <input
-                  className="btn btn-neutral"
-                  type="submit"
-                  value="Login"
+              {/* Recaptcha */}
+              <div className="flex justify-center mt-4">
+                <ReCAPTCHA
+                  sitekey="6LdEFrkrAAAAACjm6mD35W99qH2O_c5JnfVVX5ef"
+                  onChange={handleVerify}
                 />
-              </fieldset>
+              </div>
+
+              {!verified && (
+                <p className="text-red-500 text-center text-sm">
+                  Please verify the captcha to continue
+                </p>
+              )}
+
+              <button
+                disabled={!verified}
+                className="btn btn-neutral w-full mt-4"
+                type="submit"
+              >
+                Login
+              </button>
             </form>
+
+            {/* Divider */}
+            <div className="flex items-center my-6">
+              <hr className="flex-grow border-gray-300" />
+              <span className="px-3 text-gray-500 text-sm">or</span>
+              <hr className="flex-grow border-gray-300" />
+            </div>
+
+            {/* Google Login */}
+            <GoogleLoginButton  from={from} />
+
+            {/* Footer */}
+            <div className="mt-6 text-center">
+              <p className="text-sm text-gray-600">
+                New here?{" "}
+                <Link to="/signup" className="link text-blue-600 font-medium">
+                  Create an account
+                </Link>
+              </p>
+            </div>
           </div>
         </div>
       </div>

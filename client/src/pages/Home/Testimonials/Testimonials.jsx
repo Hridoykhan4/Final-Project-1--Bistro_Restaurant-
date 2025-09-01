@@ -29,7 +29,7 @@ const Testimonials = () => {
       >
         {reviews?.map((review) => (
           <SwiperSlide key={review?._id}>
-            <div className="flex flex-col items-center text-center px-6 py-10 bg-white/5 rounded-2xl shadow-lg backdrop-blur-lg hover:scale-[1.02] transition-transform duration-300">
+            <div className="flex flex-col items-center text-center px-6 py-10 bg-white/5   rounded-2xl shadow-lg backdrop-blur-lg hover:scale-[1.02] transition-transform duration-300">
               {/* Star Ratings */}
               <div className="flex justify-center items-center gap-1 mb-4">
                 {[1, 2, 3, 4, 5].map((star, idx) => (

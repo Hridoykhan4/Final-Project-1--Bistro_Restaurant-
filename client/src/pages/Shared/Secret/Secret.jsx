@@ -1,0 +1,9 @@
+const Secret = () => {
+    return (
+        <div className="pt-18">
+            I am secretsdsd Lorem ipsum dolor, sit amet consectetur adipisicing elit. Unde saepe sapiente odio quas earum ipsa quisquam reiciendis temporibus placeat laborum eos voluptas atque quibusdam voluptatibus quo at ea, harum architecto? Corporis natus non incidunt. Mollitia enim atque placeat consequuntur explicabo, possimus ipsa natus molestiae dolor necessitatibus sunt iure sequi, nisi accusantium fugiat autem, voluptas repellendus quae ea corrupti ut neque officia architecto! Non molestias commodi ipsum, nesciunt delectus eveniet ad nisi soluta labore? Cupiditate excepturi culpa voluptatem vero deleniti ipsa aliquam cum corrupti iure cumque itaque repellendus in, consectetur assumenda a autem earum repudiandae architecto facilis ex odio dolores? Sit soluta dolorem eos obcaecati unde quos cum laboriosam laborum dolorum quia beatae fuga facilis voluptate atque, aliquid veniam ea libero harum quo laudantium quibusdam distinctio perferendis! A aut alias nemo odio, adipisci ratione ab consequatur doloribus quia quis, illum placeat et, illo ea voluptatem unde. Vero quos quibusdam aliquam eaque soluta eum. Commodi assumenda fuga molestias laudantium cum deleniti at, ullam unde, soluta obcaecati maxime doloribus maiores voluptatem impedit hic omnis. Voluptates quam culpa mollitia cupiditate recusandae atque nostrum ipsum dicta maxime iste deleniti voluptatem eveniet, tempora dolorem! Modi sed consequatur alias molestias illo cumque ratione neque ipsum aspernatur tempora!            
+        </div>
+    );
+};
+
+export default Secret;
