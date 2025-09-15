@@ -1,6 +1,7 @@
 import { Link, NavLink } from "react-router-dom";
 import useAuthValue from "../../../hooks/useAuthValue";
 import Swal from "sweetalert2";
+import {FaShoppingCart} from 'react-icons/fa'
 const Navbar = () => {
   const { user, logOut } = useAuthValue();
   const navLinkStyle = ({ isActive }) =>
@@ -88,11 +89,24 @@ const Navbar = () => {
           Order Food
         </NavLink>
       </li>
+      {user && (
+        <li>
+          <NavLink className={navLinkStyle} to="/secret">
+            Secret
+          </NavLink>
+        </li>
+      )}
+
       <li>
-        <NavLink className={navLinkStyle} to="/secret">
-          Secret
+        <NavLink 
+        className={navLinkStyle}
+         to="/">
+          <button className="flex gap-2 items-center">
+            <FaShoppingCart></FaShoppingCart> <div className="badge badge-sm badge-secondary">+0</div>
+          </button>
         </NavLink>
       </li>
+
       {user ? (
         <>
           <button
@@ -116,7 +130,7 @@ const Navbar = () => {
     <div className="navbar  fixed z-50 backdrop-blur-3xl text-white bg-black/40 shadow-sm">
       <div className="navbar-start w-full">
         <Link to="/">
-          <span className="font-extrabold text-xl  ">Bistro Boss</span> <br />
+          <span className="font-extrabold text-xl">Bistro Boss</span> <br />
           <span className="tracking-widest">Restaurant</span>
         </Link>
       </div>
