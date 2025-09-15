@@ -20,6 +20,9 @@ const SignUp = () => {
 
   const handleUpload = async () => {
     if (!file) return;
+    if(!file?.type?.startsWith('image/')){
+      return;
+    }
     const formData = new FormData();
     formData.append("file", file);
     formData.append("upload_preset", "Bisto-user");

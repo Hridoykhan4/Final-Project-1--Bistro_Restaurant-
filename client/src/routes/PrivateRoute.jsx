@@ -4,10 +4,10 @@ import useAuthValue from "../hooks/useAuthValue";
 
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuthValue();
-  const location = useLocation()  
+  const location = useLocation();
   if (loading) return <LoadingSpinner />;
-    if (!user) return <Navigate to="/login" state={{ from: location }} replace />;
+  if (user) return children;
 
-    return children;
-}   
+  return <Navigate to="/login" state={{ from: location }} replace />;
+};
 export default PrivateRoute;
