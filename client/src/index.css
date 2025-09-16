@@ -3,7 +3,7 @@
 
 html{
     scroll-behavior: smooth;
-    overflow: scroll;
+    overflow-y: scroll;
 }
 
 .react-tabs__tab--selected {

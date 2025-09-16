@@ -21,42 +21,49 @@ const router = createBrowserRouter([
         element: <Home></Home>,
       },
       {
-        path: '/menu',
-        element: <Menu></Menu>
+        path: "/menu",
+        element: <Menu></Menu>,
       },
       {
-        path:"/order/:category",
-        element: <Order></Order>
+        path: "/order/:category",
+        element: <Order></Order>,
       },
       {
-        path: '/contact',
-        element: <Contact></Contact>
+        path: "/contact",
+        element: <Contact></Contact>,
       },
       {
-        path: '/login',
-        element: <Login></Login>
+        path: "/login",
+        element: <Login></Login>,
       },
       {
-        path: '/signup',
-        element: <SignUp></SignUp>
+        path: "/signup",
+        element: <SignUp></SignUp>,
       },
       {
-        path: '/secret',
-        element: <PrivateRoute><Secret></Secret></PrivateRoute>
-      }
-
+        path: "/secret",
+        element: (
+          <PrivateRoute>
+            <Secret></Secret>
+          </PrivateRoute>
+        ),
+      },
     ],
   },
   {
-    path: '/dashboard',
+    path: "/dashboard",
     element: <Dashboard></Dashboard>,
     children: [
       {
-        path: 'cart',
-        element: <Cart></Cart>
-      }
-    ]
-  }
+        path: "cart",
+        element: <Cart></Cart>,
+      },
+    ],
+  },
+  {
+    path: "*",
+    element: <h2>Error</h2>,
+  },
 ]);
 
 export default router;
