@@ -33,17 +33,24 @@ async function run() {
             res.send(await menuCollection.find().toArray());
         })
 
-        app.get('/reviews', async(req, res) => {
-             res.send(await reviewCollection.find().toArray())   
+        app.get('/reviews', async (req, res) => {
+            res.send(await reviewCollection.find().toArray())
         })
 
         /**
          * Cart Collection Start
         */
 
-        app.post('/carts', async(req, res) => {
+        app.post('/carts', async (req, res) => {
             const cartItem = req.body;
             const result = await cartCollection.insertOne(cartItem);
+            res.send(result)
+        })
+
+        app.get('/carts', async (req, res) => {
+            const email = req.query?.email;
+            const query  = {email }
+            const result = await cartCollection.find(query).toArray();
             res.send(result)
         })
 

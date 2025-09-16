@@ -9,7 +9,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 /* Swiper */
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination } from "swiper/modules";
+import { Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 
@@ -80,7 +80,7 @@ const Order = () => {
       </div>
 
       {/* Tabs */}
-      <div className="max-w-7xl mb-10 mx-auto px-4 sm:px-0">
+      <div className="max-w-7xl mb-10 mx-auto px-6 sm:px-0">
         <Tabs selectedIndex={tabIndex} onSelect={handleTabSelect}>
           {/* Tab List */}
           <TabList className="flex justify-center gap-6 border-b-2 border-gray-200 pb-4">
@@ -104,8 +104,18 @@ const Order = () => {
               <TabPanel key={category}>
                 {items.length > 0 ? (
                   <Swiper
-                    modules={[Pagination]}
+                    modules={[Pagination, Autoplay]}
                     pagination={{ clickable: true }}
+                    autoplay={
+                      window.innerWidth > 768
+                        ? {
+                            delay: 3000,
+                            disableOnInteraction: false,
+                            pauseOnMouseEnter: true,
+                          }
+                        : false 
+                    }
+                    loop={true}
                     spaceBetween={30}
                     className="my-6"
                   >

@@ -3,7 +3,7 @@ import loginImg from "../../assets/others/authentication1.png";
 import { useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import useAuthValue from "../../hooks/useAuthValue";
-import { Link,  useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import GoogleLoginButton from "../../components/Auth/GoogleLoginButton";
 
@@ -43,7 +43,7 @@ const Login = () => {
         timer: 2000,
         showConfirmButton: false,
       });
-      navigate(from, {replace: true});
+      navigate(from, { replace: true });
     } catch (err) {
       Swal.fire({
         title: "Login failed",
@@ -145,7 +145,7 @@ const Login = () => {
             </div>
 
             {/* Google Login */}
-            <GoogleLoginButton  from={from} />
+            <GoogleLoginButton from={from} />
 
             {/* Footer */}
             <div className="mt-6 text-center">
