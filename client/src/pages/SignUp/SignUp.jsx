@@ -8,9 +8,13 @@ import { FcUp } from "react-icons/fc";
 import { useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
+// eslint-disable-next-line no-unused-vars
+import { easeInOut, motion } from "framer-motion";
 
 const SignUp = () => {
-  const nav = useNavigate()
+  const axiosPublic = useAxiosPublic();
+  const nav = useNavigate();
   const { createUser, updateUserProfile } = useAuthValue();
   const [uploading, setUploading] = useState(false);
   const [file, setFile] = useState(null);
@@ -20,7 +24,7 @@ const SignUp = () => {
 
   const handleUpload = async () => {
     if (!file) return;
-    if(!file?.type?.startsWith('image/')){
+    if (!file?.type?.startsWith("image/")) {
       return;
     }
     const formData = new FormData();
@@ -78,19 +82,29 @@ const SignUp = () => {
     try {
       await createUser(data.email, data.password);
       await updateUserProfile(data.name, imageURL);
-      Swal.fire({
-        title: "Welcome 🎉",
-        text: `Account created for ${data.email}`,
-        icon: "success",
-        background: "#ecfdf5",
-        color: "#065f46",
-        timer: 2000,
-        showConfirmButton: false,
-      });
-      reset();
-      setFile(null);
-      setImageURL("");
-      nav('/')
+
+      // user entry in DB
+      const userInfo = {
+        name: data.name,
+        email: data.email,
+      };
+      const res = await axiosPublic.post("/users", userInfo);
+      if (res?.data?.insertedId) {
+        console.log("added in DB");
+        Swal.fire({
+          title: "Welcome 🎉",
+          text: `Account created for ${data.email}`,
+          icon: "success",
+          background: "#ecfdf5",
+          color: "#065f46",
+          timer: 2000,
+          showConfirmButton: false,
+        });
+        reset();
+        setFile(null);
+        setImageURL("");
+        nav("/");
+      }
     } catch (err) {
       console.error(err);
       Swal.fire({
@@ -104,7 +118,12 @@ const SignUp = () => {
   };
 
   return (
-    <section>
+    <motion.section
+      className="overflow-hidden"
+      initial={{ x: -40, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      transition={{ delay: 0.3, ease: easeInOut, duration: 1 }}
+    >
       <Helmet>
         <title>Bistro Boss - Register</title>
       </Helmet>
@@ -141,12 +160,17 @@ const SignUp = () => {
                   placeholder="Enter your name"
                   {...register("name", {
                     required: "Name is required",
-                    minLength: { value: 4, message: "Name must be at least 4 characters" },
+                    minLength: {
+                      value: 4,
+                      message: "Name must be at least 4 characters",
+                    },
                   })}
                   className="input input-bordered w-full rounded-lg"
                 />
                 {errors.name && (
-                  <span className="text-red-600 text-xs">{errors.name.message}</span>
+                  <span className="text-red-600 text-xs">
+                    {errors.name.message}
+                  </span>
                 )}
               </div>
 
@@ -168,7 +192,9 @@ const SignUp = () => {
                   className="input input-bordered w-full rounded-lg"
                 />
                 {errors.email && (
-                  <span className="text-red-600 text-xs">{errors.email.message}</span>
+                  <span className="text-red-600 text-xs">
+                    {errors.email.message}
+                  </span>
                 )}
               </div>
 
@@ -183,7 +209,10 @@ const SignUp = () => {
                   {...register("password", {
                     required: "Password is required",
                     minLength: { value: 6, message: "At least 6 characters" },
-                    maxLength: { value: 20, message: "No more than 20 characters" },
+                    maxLength: {
+                      value: 20,
+                      message: "No more than 20 characters",
+                    },
                     pattern: {
                       value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/,
                       message:
@@ -193,7 +222,9 @@ const SignUp = () => {
                   className="input input-bordered w-full rounded-lg"
                 />
                 {errors.password && (
-                  <span className="text-red-600 text-xs">{errors.password.message}</span>
+                  <span className="text-red-600 text-xs">
+                    {errors.password.message}
+                  </span>
                 )}
               </div>
 
@@ -218,7 +249,9 @@ const SignUp = () => {
                   onClick={handleUpload}
                   disabled={!file || uploading}
                   className={`w-full py-2 rounded-lg text-white font-medium ${
-                    !file || uploading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600"
+                    !file || uploading
+                      ? "bg-gray-400 cursor-not-allowed"
+                      : "bg-blue-500 hover:bg-blue-600"
                   }`}
                 >
                   {uploading ? "Uploading..." : "Upload Profile Picture"}
@@ -255,7 +288,7 @@ const SignUp = () => {
           </div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 

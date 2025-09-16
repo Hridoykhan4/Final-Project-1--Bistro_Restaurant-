@@ -2,11 +2,12 @@ import { FcGoogle } from "react-icons/fc";
 import useAuthValue from "../../hooks/useAuthValue";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
-const GoogleLoginButton = ({from}) => {
+const GoogleLoginButton = ({ from }) => {
   const { googleSignIn, setUser, user } = useAuthValue();
   const navigate = useNavigate();
-
+  const axiosPublic = useAxiosPublic();
   const handleGoogleLogin = async () => {
     try {
       const result = await googleSignIn();
@@ -15,16 +16,24 @@ const GoogleLoginButton = ({from}) => {
         name: result?.user?.displayName,
         image: result?.user?.photoURL,
       });
-      Swal.fire({
-        title: "Welcome 🎉",
-        text: `Logged in as ${user?.displayName || result.user?.email}`,
-        icon: "success",
-        background: "#ecfdf5",
-        color: "#065f46",
-        confirmButtonColor: "#10b981",
-        timer: 2000,
-        showConfirmButton: false,
-      });
+      const userInfo = {
+        name: result?.user?.displayName,
+        email: result?.user?.email,
+      };
+      const { data } = await axiosPublic.post("/users", userInfo);
+      console.log(data)
+      if (data?.insertedId) {
+        Swal.fire({
+          title: "Welcome 🎉",
+          text: `Logged in as ${user?.displayName || result.user?.email}`,
+          icon: "success",
+          background: "#ecfdf5",
+          color: "#065f46",
+          confirmButtonColor: "#10b981",
+          timer: 2000,
+          showConfirmButton: false,
+        });
+      }
       navigate(from);
     } catch (err) {
       Swal.fire({

@@ -6,8 +6,11 @@ import useAuthValue from "../../hooks/useAuthValue";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import GoogleLoginButton from "../../components/Auth/GoogleLoginButton";
-
+// eslint-disable-next-line no-unused-vars
+import { easeInOut, motion } from "framer-motion";
+import useScrollTo from "../../hooks/useScrollTo";
 const Login = () => {
+  useScrollTo();
   const [verified, setVerified] = useState(false);
   const { signIn } = useAuthValue();
   const navigate = useNavigate();
@@ -61,7 +64,11 @@ const Login = () => {
   };
 
   return (
-    <section>
+    <motion.section
+      initial={{ y: 40, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ delay: 0.3, ease: easeInOut, duration: 1 }}
+    >
       <Helmet>
         <title>Bistro Boss - Login</title>
       </Helmet>
@@ -82,6 +89,16 @@ const Login = () => {
             <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">
               Welcome Back 👋
             </h2>
+            {/* Google Login */}
+            <GoogleLoginButton from={from} />
+
+            {/* Divider */}
+            <div className="flex items-center my-6">
+              <hr className="flex-grow border-gray-300" />
+              <span className="px-3 text-gray-500 text-sm">or</span>
+              <hr className="flex-grow border-gray-300" />
+            </div>
+
             <p className="text-center text-gray-500 mb-6">
               Please login to continue to{" "}
               <span className="font-semibold text-gray-700">Bistro Boss</span>
@@ -137,16 +154,6 @@ const Login = () => {
               </button>
             </form>
 
-            {/* Divider */}
-            <div className="flex items-center my-6">
-              <hr className="flex-grow border-gray-300" />
-              <span className="px-3 text-gray-500 text-sm">or</span>
-              <hr className="flex-grow border-gray-300" />
-            </div>
-
-            {/* Google Login */}
-            <GoogleLoginButton from={from} />
-
             {/* Footer */}
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600">
@@ -159,7 +166,7 @@ const Login = () => {
           </div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 

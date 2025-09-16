@@ -36,8 +36,7 @@ const Navbar = () => {
 
     if (result?.isConfirmed) {
       try {
-        const res = await logOut();
-        console.log(res);
+       await logOut();
         Swal.fire({
           title: "Signed out!",
           text: "You have been logged out successfully.",
@@ -112,7 +111,7 @@ const Navbar = () => {
         <>
           <button
             onClick={handleLogOut}
-            className="px-5 py-2 rounded-lg bg-gray-800 text-white font-medium hover:bg-gray-700 transition-colors duration-300 shadow-sm"
+            className="px-5 py-2 btn btn-sm outline-0 border-0 rounded-lg bg-gray-800 text-white font-medium hover:bg-gray-700 transition-colors duration-300 shadow-sm"
           >
             Sign out
           </button>

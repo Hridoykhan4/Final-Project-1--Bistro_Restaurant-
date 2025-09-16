@@ -7,7 +7,15 @@ import {
 import { MdRestaurantMenu } from "react-icons/md";
 import { NavLink, Outlet } from "react-router-dom";
 import { TbBrandBooking } from "react-icons/tb";
+import useCart from "../hooks/useCart";
+import { FcContacts } from "react-icons/fc";
 const Dashboard = () => {
+  const [cart] = useCart();
+
+
+  // TODO: get isAdmin value from DB
+  const isAdmin = true 
+
   return (
     <div className="flex">
       {/* dashboard sidebar */}
@@ -25,7 +33,7 @@ const Dashboard = () => {
           </li>
           <li>
             <NavLink to="/dashboard/cart">
-              <FaShoppingCart></FaShoppingCart>My Cart{" "}
+              <FaShoppingCart></FaShoppingCart>My Cart ({cart?.length}){" "}
             </NavLink>
           </li>
           <li>
@@ -42,6 +50,7 @@ const Dashboard = () => {
           </li>
 
           <div className="divider w-full "></div>
+          {/* Shared Nav Links */}
           <li>
             <NavLink to="/">
               <FaHome />
@@ -51,6 +60,11 @@ const Dashboard = () => {
           <li>
             <NavLink to="/order/salad">
               <MdRestaurantMenu /> Menu{" "}
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/contact">
+              <FcContacts /> Contact{" "}
             </NavLink>
           </li>
         </ul>

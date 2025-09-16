@@ -1,4 +1,4 @@
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const express = require('express');
 const cors = require('cors');
 const app = express()
@@ -26,6 +26,7 @@ async function run() {
     try {
 
         const menuCollection = client.db('bistroDB').collection('menu');
+        const userCollection = client.db('bistroDB').collection('users');
         const reviewCollection = client.db('bistroDB').collection('reviews');
         const cartCollection = client.db('bistroDB').collection('carts');
 
@@ -38,9 +39,32 @@ async function run() {
         })
 
         /**
-         * Cart Collection Start
+         * User Related APIs start
         */
 
+        app.post('/users', async (req, res) => {
+            const user = req.body;
+            // Insert user if doesn't exist
+            // Ways(1. email unique , 2. upsert 3. query)
+            const query = { email: user.email};
+            const isExist = await userCollection.findOne(query);
+            if(isExist){
+                return res.send({message: 'User already exist', insertedId: null})
+            }
+            const result = await userCollection.insertOne(user);
+            res.send(result)
+        })
+
+
+        /**
+         * User Related APIs end
+        */
+
+
+        
+        /**
+         * Cart Collection Start
+        */
         app.post('/carts', async (req, res) => {
             const cartItem = req.body;
             const result = await cartCollection.insertOne(cartItem);
@@ -49,17 +73,26 @@ async function run() {
 
         app.get('/carts', async (req, res) => {
             const email = req.query?.email;
-            const query  = {email }
+            const query = { email }
             const result = await cartCollection.find(query).toArray();
             res.send(result)
         })
 
+        /* Delete an item */
+        app.delete('/carts/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await cartCollection.deleteOne(query);
+            res.send(result)
+            res.send([])
+        })
         /**
          * Cart Collection End
         */
 
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
-    } finally {
+    }
+    finally {
 
     }
 }
