@@ -11,7 +11,7 @@ const Navbar = () => {
   const { user, logOut } = useAuthValue();
   const { cart } = useCart();
   const [open, setOpen] = useState(false);
-
+  // console.log(user);
   const navLinkBase =
     "px-4 py-2 font-semibold transition duration-300 rounded-md";
   const navLinkActive = "text-green-400 font-bold border-b-2 border-green-400";
@@ -45,7 +45,7 @@ const Navbar = () => {
         });
       } catch (err) {
         Swal.fire({
-          title: `${err?.message || 'OOpps'}`,
+          title: `${err?.message || "OOpps"}`,
           text: "Something went wrong.",
           icon: "error",
         });
@@ -55,65 +55,111 @@ const Navbar = () => {
 
   const navOptions = (
     <>
-      <NavLink
-        to="/"
-        className={({ isActive }) =>
-          `${navLinkBase} ${isActive ? navLinkActive : navLinkDefault}`
-        }
-      >
-        Home
-      </NavLink>
+      <li>
+        <NavLink
+          to="/"
+          className={({ isActive }) =>
+            `${navLinkBase} ${isActive ? navLinkActive : navLinkDefault}`
+          }
+        >
+          Home
+        </NavLink>
+      </li>
 
-      <NavLink
-        to="/contact"
-        className={({ isActive }) =>
-          `${navLinkBase} ${isActive ? navLinkActive : navLinkDefault}`
-        }
-      >
-        Contact
-      </NavLink>
+      <li>
+        <NavLink
+          to="/contact"
+          className={({ isActive }) =>
+            `${navLinkBase} ${isActive ? navLinkActive : navLinkDefault}`
+          }
+        >
+          Contact
+        </NavLink>
+      </li>
 
-      <NavLink
-        to="/menu"
-        className={({ isActive }) =>
-          `${navLinkBase} ${isActive ? navLinkActive : navLinkDefault}`
-        }
-      >
-        Our Menu
-      </NavLink>
+      <li>
+        <NavLink
+          to="/menu"
+          className={({ isActive }) =>
+            `${navLinkBase} ${isActive ? navLinkActive : navLinkDefault}`
+          }
+        >
+          Our Menu
+        </NavLink>
+      </li>
 
-      <NavLink
-        to="/order/salad"
-        className={({ isActive }) =>
-          `${navLinkBase} ${isActive ? navLinkActive : navLinkDefault}`
-        }
-      >
-        Order Food
-      </NavLink>
+      <li>
+        <NavLink
+          to="/order/salad"
+          className={({ isActive }) =>
+            `${navLinkBase} ${isActive ? navLinkActive : navLinkDefault}`
+          }
+        >
+          Order Food
+        </NavLink>
+      </li>
 
-      <NavLink
-        to="/dashboard/cart"
-        className={({ isActive }) =>
-          `${navLinkBase} ${isActive ? navLinkActive : navLinkDefault}`
-        }
-      >
-        <div className="relative flex items-center gap-2">
-          <FaShoppingCart className="text-lg" />
-          <div className="badge badge-secondary text-xs">+{cart?.length}</div>
+      <li>
+        <NavLink
+          to="/dashboard/cart"
+          className={({ isActive }) =>
+            `${navLinkBase} ${isActive ? navLinkActive : navLinkDefault}`
+          }
+        >
+          <div className="relative flex items-center gap-2">
+            <FaShoppingCart className="text-lg" />
+            <div className="badge badge-secondary text-xs">+{cart?.length}</div>
 
-          {cart?.length > 0 && (
-            <span className="absolute -right-2 -top-2 h-2 w-2 bg-green-400 rounded-full animate-ping"></span>
-          )}
-        </div>
-      </NavLink>
+            {cart?.length > 0 && (
+              <span className="absolute -right-2 -top-2 h-2 w-2 bg-green-400 rounded-full animate-ping"></span>
+            )}
+          </div>
+        </NavLink>
+      </li>
 
       {user ? (
-        <button
-          onClick={handleLogout}
-          className="px-4 py-2 rounded-md bg-gray-800 text-white hover:bg-gray-700 transition font-medium"
-        >
-          Sign out
-        </button>
+        <div className="dropdown dropdown-end">
+          <div
+            tabIndex={0}
+            role="button"
+            className="btn btn-ghost btn-circle avatar"
+          >
+            <div className="w-10 object-cover h-10 rounded-full">
+              <img
+                alt="Profile Pic"
+                src={
+                  user?.photoURL ||
+                  "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                }
+              />
+            </div>
+          </div>
+          <ul
+            tabIndex="-1"
+            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+          >
+            <li>
+              <a className="justify-between">
+                {user?.displayName || "Guest"}
+                <span className="badge">Active</span>
+              </a>
+            </li>
+            <li>
+              <a className="justify-between">
+                {user?.email || "Guest"}
+                <span className="badge"></span>
+              </a>
+            </li>
+            <li>
+              <button
+                onClick={handleLogout}
+                className="px-4 py-2 rounded-md bg-gray-800 text-white hover:bg-gray-700 transition font-medium"
+              >
+                Sign out
+              </button>
+            </li>
+          </ul>
+        </div>
       ) : (
         <NavLink
           to="/login"
@@ -141,15 +187,17 @@ const Navbar = () => {
             style={{ boxShadow: "5px 13px 15px 1px #000000" }}
             className="font-extrabold text-xl text-green-300"
           >
-            Bistro Boss
+            Cafe Aziz
           </span>
           <br />
-          <span className="tracking-widest text-gray-200 text-sm">Restaurant</span>
+          <span className="tracking-widest text-gray-200 text-sm">
+            Hotel & Restaurant
+          </span>
         </Link>
       </div>
 
       {/* Desktop Menu */}
-      <div className="navbar-center hidden lg:flex">
+      <div className="navbar-center ms-auto  hidden lg:flex">
         <ul className="flex items-center gap-4">{navOptions}</ul>
       </div>
 

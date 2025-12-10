@@ -1,12 +1,13 @@
 import { useMemo } from "react";
-import SectionTitle from "../../../components/SectionTitle/SectionTitle";
-import useCart from "../../../hooks/useCart";
+import SectionTitle from "../../../../components/SectionTitle/SectionTitle";
+import useCart from "../../../../hooks/useCart";
 import { FaTrashAlt } from "react-icons/fa";
 import Swal from "sweetalert2";
-import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import useAxiosSecure from "../../../../hooks/useAxiosSecure";
+import { Helmet } from "react-helmet-async";
 
 const Cart = () => {
-  const {cart, refetch} = useCart();
+  const { cart, refetch } = useCart();
   const axiosSecure = useAxiosSecure();
   const totalCost = useMemo(() => {
     return cart.reduce((acc, val) => acc + val.price, 0);
@@ -22,7 +23,7 @@ const Cart = () => {
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
     });
-    if (result.isConfirmed) {
+    if (result?.isConfirmed) {
       const { data } = await axiosSecure.delete(`/carts/${id}`);
       if (data?.deletedCount > 0) {
         refetch();
@@ -37,6 +38,9 @@ const Cart = () => {
 
   return (
     <section>
+      <Helmet>
+        <title>Cafe Aziz | Dashboard</title>
+      </Helmet>
       <div className="text-center space-y-2">
         <SectionTitle
           heading={"Wanna add more?"}

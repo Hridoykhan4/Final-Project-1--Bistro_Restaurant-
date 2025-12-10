@@ -19,7 +19,7 @@ const OurSlogan = () => {
       <div className="flex z-0 justify-center items-center min-h-[300px] md:min-h-[400px] lg:min-h-[450px] relative ">
         <div className="text-center bg-white/20 text-white px-6 md:px-16 lg:px-24 animate-fade-in">
           <h2 className="text-3xl md:text-5xl font-extrabold tracking-wide uppercase drop-shadow-lg animate-slide-down">
-            Bistro Boss
+            Cafe Aziz Hotel
           </h2>
           <p className="mt-4 text-sm md:text-lg lg:text-xl font-medium leading-relaxed text-gray-200 animate-slide-up">
             “Where Every Bite Tells a Story — Crafted with Passion, Served with Love.”

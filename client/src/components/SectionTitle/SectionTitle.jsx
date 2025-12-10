@@ -1,7 +1,7 @@
 // SectionTitle.jsx
 const SectionTitle = ({ heading, subHeading }) => {
   return (
-    <div className="my-10 text-center max-w-md mx-auto">
+    <div className="my-5 text-center max-w-md mx-auto">
       <p className="text-yellow-500 text-sm md:text-base tracking-wide mb-3">
         {subHeading}
       </p>

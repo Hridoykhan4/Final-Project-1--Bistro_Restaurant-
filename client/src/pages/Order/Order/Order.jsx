@@ -3,13 +3,12 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 
 import { useEffect, useMemo, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import Cover from "../../Shared/Cover/Cover";
 import useMenu from "../../../hooks/useMenu";
 import FoodCard from "../../../components/FoodCard/FoodCard";
 
-// Images
 import orderCover from "../../../assets/shop/order.jpg";
 
 /* Swiper */
@@ -21,10 +20,10 @@ import "swiper/css/navigation";
 
 const categories = ["salad", "pizza", "soup", "dessert", "drinks"];
 
-// Reusable chunk helper
-const chunk = (array, size) =>
-  Array.from({ length: Math.ceil(array.length / size) }, (_, i) =>
-    array.slice(i * size, i * size + size)
+// Utility: split array into N-size chunks
+const chunkArray = (arr, size) =>
+  [...Array(Math.ceil(arr.length / size))].map((_, i) =>
+    arr.slice(i * size, i * size + size)
   );
 
 const Order = () => {
@@ -32,30 +31,33 @@ const Order = () => {
   const { category } = useParams();
   const { menu } = useMenu();
 
-  // Initial tab value
+  /** Determine tab from URL */
   const initialTab = categories.indexOf(category);
-  const [tabIndex, setTabIndex] = useState(initialTab !== -1 ? initialTab : 0);
+  const [tabIndex, setTabIndex] = useState(initialTab >= 0 ? initialTab : 0);
 
-  // Sync when URL changes
+  /** Sync tab when URL changes */
   useEffect(() => {
     const idx = categories.indexOf(category);
-    setTabIndex(idx !== -1 ? idx : 0);
+    if (idx === -1) return;
+    setTabIndex(idx);
   }, [category]);
 
-  const categorized = useMemo(() => {
-    const grouped = {};
-    categories.forEach((c) => (grouped[c] = []));
+  /** Group menu by category */
+  const categorizedMenu = useMemo(() => {
+    const grouped = Object.fromEntries(categories.map((c) => [c, []]));
     menu.forEach((item) => {
       if (grouped[item.category]) grouped[item.category].push(item);
     });
     return grouped;
   }, [menu]);
 
+  /** Handle tab switch + sync URL */
   const handleTabSelect = (index) => {
     setTabIndex(index);
     nav(`/order/${categories[index]}`);
   };
 
+  /** Desktop autoplay only */
   const autoplaySettings = useMemo(
     () =>
       window.innerWidth > 768
@@ -71,36 +73,36 @@ const Order = () => {
   return (
     <section>
       <Helmet>
-        <title>Bistro | Order</title>
+        <title>Cafe Aziz | Order</title>
       </Helmet>
 
-      {/* Cover */}
+      {/* Header Cover */}
       <Cover
         img={orderCover}
         title="Order Food"
         desc="Your cravings, delivered hot & fresh!"
       />
 
-      {/* Intro */}
-      <div className="max-w-4xl mx-auto text-center px-6 my-6">
-        <h2 className="text-3xl md:text-4xl font-bold mb-4">
+      {/* Intro Section */}
+      <div className="max-w-3xl mx-auto text-center px-6 mt-10">
+        <h2 className="text-4xl font-bold tracking-tight mb-4">
           🍴 Choose. Click. Enjoy.
         </h2>
-        <p className="text-gray-600 md:text-lg leading-relaxed">
-          Discover a wide variety of dishes tailored to your taste. Whether
-          you're craving something cheesy, spicy, or sweet — we’ve got it all
-          ready for you.
+        <p className="text-gray-600 text-lg leading-relaxed">
+          Explore our delicious categories and pick your favorites — freshly
+          made and ready to serve.
         </p>
       </div>
 
-      {/* Tabs */}
-      <div className="max-w-7xl mb-10 mx-auto px-6 sm:px-0">
+      {/* Tabs Section */}
+      <div className="max-w-7xl mx-auto px-6 my-12">
         <Tabs selectedIndex={tabIndex} onSelect={handleTabSelect}>
-          <TabList className="flex justify-center gap-6 border-b-2 border-gray-200 pb-4">
+          <TabList className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-6 border-b pb-4">
             {categories.map((c) => (
               <Tab
                 key={c}
-                className="react-tabs__tab px-6 py-2 text-lg font-medium cursor-pointer rounded-lg capitalize transition-all duration-300"
+                className="px-6 py-2 text-lg rounded-lg cursor-pointer capitalize transition
+                           duration-300 hover:bg-gray-100 font-medium"
                 selectedClassName="bg-indigo-600 text-white shadow-md"
               >
                 {c}
@@ -108,30 +110,30 @@ const Order = () => {
             ))}
           </TabList>
 
-          {/* Panels */}
+          {/* Panels for each category */}
           {categories.map((c) => {
-            const items = categorized[c];
-            const slides = chunk(items, 6);
+            const items = categorizedMenu[c];
+            const slides = chunkArray(items, 6);
 
             return (
               <TabPanel key={c}>
                 {items.length === 0 ? (
-                  <p className="text-gray-500 italic mt-6">
+                  <p className="text-center text-gray-500 italic mt-6">
                     No items available
                   </p>
                 ) : (
                   <Swiper
                     modules={[Pagination, Autoplay, Navigation]}
                     navigation
-                    pagination={{ clickable: true }}
+                    pagination={{ type: "fraction", clickable: true }}
                     autoplay={autoplaySettings}
-                    loop={items?.length > 5}
+                    loop={items.length > 6} 
                     spaceBetween={30}
-                    className="my-6"
+                    className="mt-10"
                   >
                     {slides.map((group, idx) => (
                       <SwiperSlide key={idx}>
-                        <div className="grid grid-cols-1 px-5 sm:px-20 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-5 sm:px-20">
                           {group.map((item) => (
                             <FoodCard key={item._id} item={item} />
                           ))}

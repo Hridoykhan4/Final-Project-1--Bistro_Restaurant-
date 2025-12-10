@@ -70,7 +70,7 @@ const Login = () => {
       transition={{ delay: 0.3, ease: easeInOut, duration: 1 }}
     >
       <Helmet>
-        <title>Bistro Boss - Login</title>
+        <title>Cafe Aziz - Login</title>
       </Helmet>
 
       <div className="hero min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
@@ -101,7 +101,7 @@ const Login = () => {
 
             <p className="text-center text-gray-500 mb-6">
               Please login to continue to{" "}
-              <span className="font-semibold text-gray-700">Bistro Boss</span>
+              <span className="font-semibold text-gray-700">Cafe Aziz</span>
             </p>
 
             <form onSubmit={handleLogin} className="space-y-4">
@@ -134,7 +134,7 @@ const Login = () => {
               {/* Recaptcha */}
               <div className="flex justify-center mt-4">
                 <ReCAPTCHA
-                  sitekey="6LdEFrkrAAAAACjm6mD35W99qH2O_c5JnfVVX5ef"
+                  sitekey={import.meta.env.VITE_Recaptcha_Site_key}
                   onChange={handleVerify}
                 />
               </div>

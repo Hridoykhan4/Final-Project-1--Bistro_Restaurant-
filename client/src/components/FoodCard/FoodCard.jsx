@@ -37,6 +37,7 @@ const FoodCard = ({ item }) => {
           name,
           image,
           price,
+          orderStatus: 'pending'
         };
         try {
           const { data } = await axiosSecure.post("/carts", cartItem);
