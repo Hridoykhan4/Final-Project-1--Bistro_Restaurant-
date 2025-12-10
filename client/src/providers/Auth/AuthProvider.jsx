@@ -11,9 +11,11 @@ import {
   signOut,
   updateProfile,
 } from "firebase/auth";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 const AuthProvider = ({ children }) => {
+  const axiosPublic = useAxiosPublic();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -35,15 +37,14 @@ const AuthProvider = ({ children }) => {
     return signInWithEmailAndPassword(auth, email, pass);
   };
 
-
-  // Update User 
+  // Update User
   const updateUserProfile = (name, photo) => {
     setLoading(true);
     return updateProfile(auth.currentUser, {
       displayName: name,
-      photoURL: photo
-    })
-  }
+      photoURL: photo,
+    });
+  };
 
   // Log out
   const logOut = () => {
@@ -59,17 +60,33 @@ const AuthProvider = ({ children }) => {
     signIn,
     logOut,
     googleSignIn,
-    updateUserProfile
+    updateUserProfile,
   };
 
   useEffect(() => {
-    const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      setLoading(false);
+    const unSubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      try {
+        if (currentUser) {
+          const { data } = await axiosPublic.post("/jwt", {
+            email: currentUser?.email,
+          });
+          localStorage.setItem("token", data?.token || "");
+          setUser(currentUser);
+        } else {
+          localStorage.removeItem("token");
+          setUser(null);
+        }
+      } catch (err) {
+        console.log("JWT Fetch Error", err);
+        localStorage.removeItem("token");
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
     });
 
     return () => unSubscribe();
-  }, []);
+  }, [axiosPublic]);
 
   return (
     <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>

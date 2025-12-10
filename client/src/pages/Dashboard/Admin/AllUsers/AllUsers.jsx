@@ -127,7 +127,9 @@ const AllUsers = () => {
                     <td>{user?.email}</td>
                     <td>
                       {user?.role === "admin" ? (
-                        <button className="btn bg-green-600">Admin</button>
+                        <button className="btn text-white bg-green-600">
+                          Admin
+                        </button>
                       ) : (
                         <button
                           onClick={() => handleMakeAdmin(user._id, user.name)}

@@ -14,10 +14,13 @@ import { TbBrandBooking } from "react-icons/tb";
 import { FcContacts } from "react-icons/fc";
 import { NavLink, Outlet } from "react-router-dom";
 import useCart from "../hooks/useCart";
+import useAdmin from "../hooks/useAdmin";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const Dashboard = () => {
   const { cart } = useCart();
-  const isAdmin = true; // TODO: Fetch this from DB
+  const { isAdmin, isAdminLoading } = useAdmin();
+  
   const navLinkBase =
     "px-4 py-2 font-semibold transition duration-300 rounded-md";
   const navLinkActive = "text-green-400 font-bold border-b-2 border-green-400";
@@ -29,7 +32,9 @@ const Dashboard = () => {
           <li>
             <NavLink
               to="/dashboard/adminHome"
-              className={"text-lg font-semibold flex items-center gap-1"}
+              className={({ isActive }) =>
+                `${navLinkBase} ${isActive ? navLinkActive : navLinkDefault}`
+              }
             >
               <FaHome />
               Admin Home
@@ -39,7 +44,9 @@ const Dashboard = () => {
           <li>
             <NavLink
               to="/dashboard/addItems"
-              className={"text-lg font-semibold flex items-center gap-1"}
+              className={({ isActive }) =>
+                `${navLinkBase} ${isActive ? navLinkActive : navLinkDefault}`
+              }
             >
               <FaUtensils />
               Add items
@@ -48,7 +55,9 @@ const Dashboard = () => {
           <li>
             <NavLink
               to="/dashboard/manageItems"
-              className={"text-lg font-semibold  flex items-center gap-1"}
+              className={({ isActive }) =>
+                `${navLinkBase} ${isActive ? navLinkActive : navLinkDefault}`
+              }
             >
               <FaList />
               Manage items
@@ -57,7 +66,9 @@ const Dashboard = () => {
           <li>
             <NavLink
               to="/dashboard/manageBooking"
-              className={"text-lg font-semibold  flex items-center gap-1"}
+              className={({ isActive }) =>
+                `${navLinkBase} ${isActive ? navLinkActive : navLinkDefault}`
+              }
             >
               <FaBook />
               Manage bookings
@@ -66,7 +77,9 @@ const Dashboard = () => {
           <li>
             <NavLink
               to="/dashboard/allUsers"
-              className={"text-lg font-semibold  flex items-center gap-1"}
+              className={({ isActive }) =>
+                `${navLinkBase} ${isActive ? navLinkActive : navLinkDefault}`
+              }
             >
               <FaUser />
               All Users
@@ -177,6 +190,7 @@ const Dashboard = () => {
     </>
   );
 
+  if (isAdminLoading) return <LoadingSpinner></LoadingSpinner>
   return (
     <div className="drawer lg:drawer-open">
       <input id="dashboard-drawer" type="checkbox" className="drawer-toggle" />

@@ -2,12 +2,13 @@ import axios from "axios";
 import { useEffect } from "react";
 import useAuthValue from "./useAuthValue";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const axiosSecure = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
 });
 const useAxiosSecure = () => {
-  const { user, logOut } = useAuthValue();
+  const { logOut } = useAuthValue();
   const nav = useNavigate();
   useEffect(() => {
     const requestInterceptor = axiosSecure.interceptors.request.use(
@@ -19,25 +20,14 @@ const useAxiosSecure = () => {
       (err) => Promise.reject(err)
     );
 
-    return () => {
-      axiosSecure.interceptors.request.eject(requestInterceptor);
-    };
-  }, [user]);
-
-  return axiosSecure;
-};
-
-export default useAxiosSecure;
-/*
     const responseInterceptor = axiosSecure.interceptors.response.use(
-      (res) => res,
+      (config) => config,
       async (error) => {
         console.log(error);
-        if (
-          error?.response?.status === 401 ||
-          error?.response?.status === 403
-        ) {
-          await logout();
+
+        const errorStatus = error?.response?.status;
+        if (errorStatus === 401 || errorStatus === 403) {
+          await logOut();
           nav(`/login`, { replace: true });
           Swal.fire({
             title: `${error?.response?.data?.message || error?.message}`,
@@ -46,6 +36,7 @@ export default useAxiosSecure;
             showConfirmButton: false,
           });
         }
+
         return Promise.reject(error);
       }
     );
@@ -54,10 +45,9 @@ export default useAxiosSecure;
       axiosSecure.interceptors.request.eject(requestInterceptor);
       axiosSecure.interceptors.response.eject(responseInterceptor);
     };
-  }, [logout, nav]);
+  }, [logOut, nav]);
 
   return axiosSecure;
 };
 
 export default useAxiosSecure;
- */
