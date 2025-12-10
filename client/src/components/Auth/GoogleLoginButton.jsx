@@ -13,15 +13,15 @@ const GoogleLoginButton = ({ from }) => {
       const result = await googleSignIn();
       setUser({
         ...result,
-        name: result?.user?.displayName,
-        image: result?.user?.photoURL,
+        displayName: result?.user?.displayName,
+        photoURL: result?.user?.photoURL,
       });
       const userInfo = {
         name: result?.user?.displayName,
         email: result?.user?.email,
       };
       const { data } = await axiosPublic.post("/users", userInfo);
-      console.log(data)
+      console.log(data);
       if (data?.insertedId) {
         Swal.fire({
           title: "Welcome 🎉",

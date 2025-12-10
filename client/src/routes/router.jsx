@@ -32,14 +32,7 @@ const router = createBrowserRouter([
         path: "/contact",
         element: <Contact></Contact>,
       },
-      {
-        path: "/login",
-        element: <Login></Login>,
-      },
-      {
-        path: "/signup",
-        element: <SignUp></SignUp>,
-      },
+
       {
         path: "/secret",
         element: (
@@ -63,6 +56,14 @@ const router = createBrowserRouter([
         element: <Cart></Cart>,
       },
     ],
+  },
+  {
+    path: "/login",
+    element: <Login></Login>,
+  },
+  {
+    path: "/signup",
+    element: <SignUp></SignUp>,
   },
   {
     path: "*",

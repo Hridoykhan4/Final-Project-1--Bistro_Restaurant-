@@ -19,7 +19,7 @@ const Banner = () => {
         swipeable
         emulateTouch
         transitionTime={800}
-        stopOnHover={true}
+        stopOnHover={false}
         showArrows={true}
         className="banner-carousel"
       >

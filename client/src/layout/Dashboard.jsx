@@ -10,7 +10,7 @@ import { TbBrandBooking } from "react-icons/tb";
 import useCart from "../hooks/useCart";
 import { FcContacts } from "react-icons/fc";
 const Dashboard = () => {
-  const [cart] = useCart();
+  const {cart} = useCart();
 
 
   // TODO: get isAdmin value from DB

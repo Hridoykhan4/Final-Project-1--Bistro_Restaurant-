@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const Cart = () => {
-  const [cart, refetch] = useCart();
+  const {cart, refetch} = useCart();
   const axiosSecure = useAxiosSecure();
   const totalCost = useMemo(() => {
     return cart.reduce((acc, val) => acc + val.price, 0);

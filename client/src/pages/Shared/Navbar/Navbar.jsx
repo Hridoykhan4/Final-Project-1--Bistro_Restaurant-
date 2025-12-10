@@ -1,19 +1,23 @@
 import { Link, NavLink } from "react-router-dom";
-import useAuthValue from "../../../hooks/useAuthValue";
+import { useState } from "react";
+// eslint-disable-next-line no-unused-vars
+import { motion } from "motion/react";
 import Swal from "sweetalert2";
 import { FaShoppingCart } from "react-icons/fa";
+import useAuthValue from "../../../hooks/useAuthValue";
 import useCart from "../../../hooks/useCart";
+
 const Navbar = () => {
   const { user, logOut } = useAuthValue();
-  const [cart] = useCart();
-  const navLinkStyle = ({ isActive }) =>
-    `px-4 py-2 font-semibold transition ${
-      isActive
-        ? "text-green-400 font-bold border-b-2 border-green-400"
-        : "text-white hover:text-green-400"
-    }`;
+  const { cart } = useCart();
+  const [open, setOpen] = useState(false);
 
-  const handleLogOut = async () => {
+  const navLinkBase =
+    "px-4 py-2 font-semibold transition duration-300 rounded-md";
+  const navLinkActive = "text-green-400 font-bold border-b-2 border-green-400";
+  const navLinkDefault = "text-white hover:text-green-400";
+
+  const handleLogout = async () => {
     const result = await Swal.fire({
       title: "Sign out?",
       text: "Do you really want to log out?",
@@ -27,42 +31,23 @@ const Navbar = () => {
       cancelButtonText: "Stay logged in",
       customClass: {
         popup: "rounded-2xl shadow-xl",
-        title: "text-lg font-semibold",
-        htmlContainer: "text-sm",
-        confirmButton: "px-4 py-2 rounded-lg",
-        cancelButton: "px-4 py-2 rounded-lg",
       },
     });
 
-    if (result?.isConfirmed) {
+    if (result.isConfirmed) {
       try {
-       await logOut();
+        await logOut();
         Swal.fire({
-          title: "Signed out!",
-          text: "You have been logged out successfully.",
+          title: "Logged out!",
           icon: "success",
-          background: "#ecfdf5",
-          color: "#065f46",
-          confirmButtonColor: "#10b981",
-          customClass: {
-            popup: "rounded-2xl shadow-lg",
-            confirmButton: "px-4 py-2 rounded-lg",
-          },
-          timer: 2000,
+          timer: 1800,
           showConfirmButton: false,
         });
       } catch (err) {
-        console.error(err);
         Swal.fire({
-          title: "Oops!",
-          text: "Something went wrong while logging out.",
+          title: `${err?.message || 'OOpps'}`,
+          text: "Something went wrong.",
           icon: "error",
-          background: "#fef2f2",
-          color: "#7f1d1d",
-          confirmButtonColor: "#ef4444",
-          customClass: {
-            popup: "rounded-2xl shadow-lg",
-          },
         });
       }
     }
@@ -70,103 +55,125 @@ const Navbar = () => {
 
   const navOptions = (
     <>
-      <li>
-        <NavLink className={navLinkStyle} to="/">
-          Home
-        </NavLink>
-      </li>
-      <li>
-        <NavLink className={navLinkStyle} to="/contact">
-          Contact Us
-        </NavLink>
-      </li>
-      <li>
-        <NavLink className={navLinkStyle} to="/menu">
-          Our Menu
-        </NavLink>
-      </li>
-      <li>
-        <NavLink className={navLinkStyle} to="/order/salad">
-          Order Food
-        </NavLink>
-      </li>
-      {user && (
-        <li>
-          <NavLink className={navLinkStyle} to="/secret">
-            Secret
-          </NavLink>
-        </li>
-      )}
+      <NavLink
+        to="/"
+        className={({ isActive }) =>
+          `${navLinkBase} ${isActive ? navLinkActive : navLinkDefault}`
+        }
+      >
+        Home
+      </NavLink>
 
-      <li>
-        <NavLink className={navLinkStyle} to="/dashboard/cart">
-          <button className="flex gap-2 items-center">
-            <FaShoppingCart></FaShoppingCart>{" "}
-            <div className="badge badge-sm badge-secondary">+{cart?.length}</div>
-          </button>
-        </NavLink>
-      </li>
+      <NavLink
+        to="/contact"
+        className={({ isActive }) =>
+          `${navLinkBase} ${isActive ? navLinkActive : navLinkDefault}`
+        }
+      >
+        Contact
+      </NavLink>
+
+      <NavLink
+        to="/menu"
+        className={({ isActive }) =>
+          `${navLinkBase} ${isActive ? navLinkActive : navLinkDefault}`
+        }
+      >
+        Our Menu
+      </NavLink>
+
+      <NavLink
+        to="/order/salad"
+        className={({ isActive }) =>
+          `${navLinkBase} ${isActive ? navLinkActive : navLinkDefault}`
+        }
+      >
+        Order Food
+      </NavLink>
+
+      <NavLink
+        to="/dashboard/cart"
+        className={({ isActive }) =>
+          `${navLinkBase} ${isActive ? navLinkActive : navLinkDefault}`
+        }
+      >
+        <div className="relative flex items-center gap-2">
+          <FaShoppingCart className="text-lg" />
+          <div className="badge badge-secondary text-xs">+{cart?.length}</div>
+
+          {cart?.length > 0 && (
+            <span className="absolute -right-2 -top-2 h-2 w-2 bg-green-400 rounded-full animate-ping"></span>
+          )}
+        </div>
+      </NavLink>
 
       {user ? (
-        <>
-          <button
-            onClick={handleLogOut}
-            className="px-5 py-2 btn btn-sm outline-0 border-0 rounded-lg bg-gray-800 text-white font-medium hover:bg-gray-700 transition-colors duration-300 shadow-sm"
-          >
-            Sign out
-          </button>
-        </>
+        <button
+          onClick={handleLogout}
+          className="px-4 py-2 rounded-md bg-gray-800 text-white hover:bg-gray-700 transition font-medium"
+        >
+          Sign out
+        </button>
       ) : (
-        <>
-          <NavLink to="/login" className={navLinkStyle}>
-            Login
-          </NavLink>
-        </>
+        <NavLink
+          to="/login"
+          className={({ isActive }) =>
+            `${navLinkBase} ${isActive ? navLinkActive : navLinkDefault}`
+          }
+        >
+          Login
+        </NavLink>
       )}
     </>
   );
 
   return (
-    <div className="navbar  fixed z-50 backdrop-blur-3xl text-white bg-black/40 shadow-sm">
-      <div className="navbar-start w-full">
-        <Link className="" to="/">
-          <span style={{boxShadow: '5px 13px 15px 1px #000000'}} className="font-extrabold text-xl pr-2">Bistro Boss</span> <br />
-          <span className="tracking-widest">Restaurant</span>
+    <motion.div
+      initial={{ y: -30, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.4 }}
+      className="navbar fixed z-50 bg-black/40 backdrop-blur-xl shadow-lg px-4"
+    >
+      {/* Logo */}
+      <div className="navbar-start">
+        <Link to="/" className="leading-tight">
+          <span
+            style={{ boxShadow: "5px 13px 15px 1px #000000" }}
+            className="font-extrabold text-xl text-green-300"
+          >
+            Bistro Boss
+          </span>
+          <br />
+          <span className="tracking-widest text-gray-200 text-sm">Restaurant</span>
         </Link>
       </div>
-      <div className="navbar-center items-end self-end ms-auto hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">{navOptions}</ul>
+
+      {/* Desktop Menu */}
+      <div className="navbar-center hidden lg:flex">
+        <ul className="flex items-center gap-4">{navOptions}</ul>
       </div>
-      <div className="navbar-end w-fit lg:ms-3">
-        {/* <Link className="btn" to="/login">Login</Link> */}
-        {/* <button className="btn">Cart</button> */}
-        <div className="dropdown dropdown-end ms-3">
-          <div tabIndex={0} role="button" className="btn btn-outline lg:hidden">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              {" "}
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h8m-8 6h16"
-              />{" "}
-            </svg>
-          </div>
-          <ul
-            tabIndex={0}
-            className="menu menu-sm dropdown-content  bg-gray-700 rounded-box z-1 mt-3 w-52 p-2 shadow"
+
+      {/* Mobile Menu */}
+      <div className="navbar-end lg:hidden">
+        <button
+          onClick={() => setOpen(!open)}
+          className="btn btn-outline text-white"
+        >
+          ☰
+        </button>
+
+        {open && (
+          <motion.ul
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.25 }}
+            className="absolute w-52 flex flex-col right-4 top-16 bg-gray-800 p-4 rounded-lg shadow-xl space-y-3"
           >
             {navOptions}
-          </ul>
-        </div>
+          </motion.ul>
+        )}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

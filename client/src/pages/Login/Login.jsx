@@ -38,7 +38,7 @@ const Login = () => {
       const result = await signIn(email, password);
       Swal.fire({
         title: "Welcome back 👋",
-        text: `Hello, ${result.user?.email || "User"}!`,
+        text: `Hello, ${result.user?.displayName || "User"}!`,
         icon: "success",
         background: "#ecfdf5",
         color: "#065f46",

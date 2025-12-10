@@ -1,66 +1,80 @@
-import orderCover from "../../../assets/shop/order.jpg";
-import Cover from "../../Shared/Cover/Cover";
 import { Helmet } from "react-helmet-async";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
+
+import { useEffect, useMemo, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+
+import Cover from "../../Shared/Cover/Cover";
 import useMenu from "../../../hooks/useMenu";
 import FoodCard from "../../../components/FoodCard/FoodCard";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+
+// Images
+import orderCover from "../../../assets/shop/order.jpg";
+
 /* Swiper */
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Autoplay } from "swiper/modules";
+import { Pagination, Autoplay, Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
+import "swiper/css/navigation";
+
+const categories = ["salad", "pizza", "soup", "dessert", "drinks"];
+
+// Reusable chunk helper
+const chunk = (array, size) =>
+  Array.from({ length: Math.ceil(array.length / size) }, (_, i) =>
+    array.slice(i * size, i * size + size)
+  );
 
 const Order = () => {
   const nav = useNavigate();
-  const { pathname } = useLocation();
-
-  const categories = ["salad", "pizza", "soup", "dessert", "drinks"];
   const { category } = useParams();
-  const initialState = categories.indexOf(category);
-  const [tabIndex, setTabIndex] = useState(
-    initialState === -1 ? 0 : initialState
-  );
+  const { menu } = useMenu();
 
-  const [menu] = useMenu();
+  // Initial tab value
+  const initialTab = categories.indexOf(category);
+  const [tabIndex, setTabIndex] = useState(initialTab !== -1 ? initialTab : 0);
 
+  // Sync when URL changes
   useEffect(() => {
-    if (pathname === "/order/salad") {
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    const newIndex = categories.indexOf(category);
-    setTabIndex(newIndex === -1 ? 0 : initialState);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const idx = categories.indexOf(category);
+    setTabIndex(idx !== -1 ? idx : 0);
   }, [category]);
+
+  const categorized = useMemo(() => {
+    const grouped = {};
+    categories.forEach((c) => (grouped[c] = []));
+    menu.forEach((item) => {
+      if (grouped[item.category]) grouped[item.category].push(item);
+    });
+    return grouped;
+  }, [menu]);
 
   const handleTabSelect = (index) => {
     setTabIndex(index);
     nav(`/order/${categories[index]}`);
   };
 
-  // helper: chunk items into pages
-  const chunkArray = (arr, size) => {
-    const chunks = [];
-    for (let i = 0; i < arr.length; i += size) {
-      chunks.push(arr.slice(i, i + size));
-    }
-    return chunks;
-  };
+  const autoplaySettings = useMemo(
+    () =>
+      window.innerWidth > 768
+        ? {
+            delay: 3000,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true,
+          }
+        : false,
+    []
+  );
 
   return (
     <section>
       <Helmet>
         <title>Bistro | Order</title>
       </Helmet>
+
+      {/* Cover */}
       <Cover
         img={orderCover}
         title="Order Food"
@@ -74,63 +88,57 @@ const Order = () => {
         </h2>
         <p className="text-gray-600 md:text-lg leading-relaxed">
           Discover a wide variety of dishes tailored to your taste. Whether
-          you’re craving something cheesy, spicy, or sweet – we’ve got it
-          covered.
+          you're craving something cheesy, spicy, or sweet — we’ve got it all
+          ready for you.
         </p>
       </div>
 
       {/* Tabs */}
       <div className="max-w-7xl mb-10 mx-auto px-6 sm:px-0">
         <Tabs selectedIndex={tabIndex} onSelect={handleTabSelect}>
-          {/* Tab List */}
           <TabList className="flex justify-center gap-6 border-b-2 border-gray-200 pb-4">
-            {categories.map((category) => (
+            {categories.map((c) => (
               <Tab
-                key={category}
-                className="react-tabs__tab px-6 py-2 text-lg font-medium cursor-pointer rounded-lg transition-all capitalize duration-300"
-                selectedClassName="bg-indigo-600 text-white rounded-lg shadow-md"
+                key={c}
+                className="react-tabs__tab px-6 py-2 text-lg font-medium cursor-pointer rounded-lg capitalize transition-all duration-300"
+                selectedClassName="bg-indigo-600 text-white shadow-md"
               >
-                {category}
+                {c}
               </Tab>
             ))}
           </TabList>
 
           {/* Panels */}
-          {categories.map((category) => {
-            const items = menu.filter((m) => m.category === category);
-            const pages = chunkArray(items, 6);
+          {categories.map((c) => {
+            const items = categorized[c];
+            const slides = chunk(items, 6);
 
             return (
-              <TabPanel key={category}>
-                {items.length > 0 ? (
+              <TabPanel key={c}>
+                {items.length === 0 ? (
+                  <p className="text-gray-500 italic mt-6">
+                    No items available
+                  </p>
+                ) : (
                   <Swiper
-                    modules={[Pagination, Autoplay]}
+                    modules={[Pagination, Autoplay, Navigation]}
+                    navigation
                     pagination={{ clickable: true }}
-                    autoplay={
-                      window.innerWidth > 768
-                        ? {
-                            delay: 3000,
-                            disableOnInteraction: false,
-                            pauseOnMouseEnter: true,
-                          }
-                        : false 
-                    }
-                    loop={true}
+                    autoplay={autoplaySettings}
+                    loop={items?.length > 5}
                     spaceBetween={30}
                     className="my-6"
                   >
-                    {pages.map((page, pageIndex) => (
-                      <SwiperSlide key={pageIndex}>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                          {page.map((item) => (
+                    {slides.map((group, idx) => (
+                      <SwiperSlide key={idx}>
+                        <div className="grid grid-cols-1 px-5 sm:px-20 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                          {group.map((item) => (
                             <FoodCard key={item._id} item={item} />
                           ))}
                         </div>
                       </SwiperSlide>
                     ))}
                   </Swiper>
-                ) : (
-                  <p className="text-gray-500 italic">No items found</p>
                 )}
               </TabPanel>
             );

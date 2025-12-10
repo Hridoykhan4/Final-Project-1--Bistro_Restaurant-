@@ -5,15 +5,16 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
 import { useEffect, useState } from "react";
+import useAxiosPublic from "../../../hooks/useAxiosPublic";
 
 const Testimonials = () => {
   const [reviews, setReviews] = useState([]);
-
+  const axiosPublic = useAxiosPublic();
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/reviews`)
-      .then((res) => res.json())
-      .then((data) => setReviews(data));
-  }, []);
+    axiosPublic(`/reviews`)
+     
+      .then(({data}) => setReviews(data));
+  }, [axiosPublic]);
 
   return (
     <section className="w-full max-w-7xl mx-auto mb-16 mt-16 px-4 py-10 rounded-3xl bg-gradient-to-br from-gray-900 via-gray-800 to-black shadow-2xl overflow-hidden">

@@ -46,7 +46,7 @@ const Category = () => {
         breakpoints={{
           640: { slidesPerView: 2, spaceBetween: 20 },
           768: { slidesPerView: 3, spaceBetween: 25 },
-          1024: { slidesPerView: 4, spaceBetween: 30 },
+          1024: { slidesPerView: 3, spaceBetween: 30 },
         }}
         pagination={{ clickable: true }}
         modules={[Pagination]}
@@ -60,7 +60,7 @@ const Category = () => {
               initial="hidden"
               whileInView="visible"
               whileHover="hover"
-              viewport={{ once: true, amount: 0.3 }} // animate only once when in view
+              viewport={{ once: true, amount: 0.3 }} 
             >
               {/* Image */}
               <motion.img
