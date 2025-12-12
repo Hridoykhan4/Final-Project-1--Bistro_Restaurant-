@@ -138,9 +138,51 @@ async function run() {
     app.get(
       "/menu",
       asyncHandler(async (req, res) => {
-        res.send(await menuCollection.find().toArray());
+        // Pagination Params
+        const page = parseInt(req.query?.page) || 1;
+        const limit = parseInt(req.query?.limit) || 10;
+        const skip = (page - 1) * limit;
+
+        if (req?.query?.forManageItems === "true") {
+          const total = await menuCollection.countDocuments();
+          const items = await menuCollection
+            .find()
+            .skip(skip)
+            .limit(limit)
+            .toArray();
+          return res.send({
+            total,
+            page,
+            limit,
+            items,
+            totalPages: Math.ceil(total / limit) || 1,
+          });
+        }
+        const allItems = await menuCollection.find().toArray();
+        res.send({ items: allItems });
       })
     );
+
+    app.get('/menu/:id', async(req, res) => {
+      res.send(await menuCollection.findOne({_id: new ObjectId(req.params.id)}))
+    })
+
+    app.post(
+      "/menu",
+      verifyToken,
+      verifyValidEmail,
+      verifyAdmin,
+      asyncHandler(async (req, res) => {
+        res.send(await menuCollection.insertOne(req.body));
+      })
+    );
+
+    app.delete("/menu/:id", verifyToken, verifyAdmin, async (req, res) => {
+      await cartCollection.deleteMany({ menuId: req.params.id });
+      res.send(await menuCollection.deleteOne({ _id: new ObjectId(req.params.id) }));
+    });
+
+    // app.post('')
 
     /* _______MENU END */
 
