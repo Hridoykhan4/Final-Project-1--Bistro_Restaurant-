@@ -20,7 +20,6 @@ import LoadingSpinner from "../components/LoadingSpinner";
 const Dashboard = () => {
   const { cart } = useCart();
   const { isAdmin, isAdminLoading } = useAdmin();
-  
   const navLinkBase =
     "px-4 py-2 font-semibold transition duration-300 rounded-md";
   const navLinkActive = "text-green-400 font-bold border-b-2 border-green-400";
@@ -190,7 +189,7 @@ const Dashboard = () => {
     </>
   );
 
-  if (isAdminLoading) return <LoadingSpinner></LoadingSpinner>
+  if (isAdminLoading) return <LoadingSpinner></LoadingSpinner>;
   return (
     <div className="drawer lg:drawer-open">
       <input id="dashboard-drawer" type="checkbox" className="drawer-toggle" />

@@ -15,7 +15,7 @@ const useAdmin = () => {
       );
       return data?.admin ?? false;
     },
-    staleTime: 5 * 60 * 1000,staleTime: 5 * 60 * 1000,
+    staleTime: 5 * 60 * 1000
   });
   return { isAdmin, isAdminLoading };
 };

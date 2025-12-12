@@ -11,6 +11,7 @@ import Secret from "../pages/Shared/Secret/Secret";
 import Dashboard from "../layout/Dashboard";
 import Cart from "../pages/Dashboard/Customer/Cart/Cart";
 import AllUsers from "../pages/Dashboard/Admin/AllUsers/AllUsers";
+import AdminRoute from "./AdminRoute";
 
 const router = createBrowserRouter([
   {
@@ -60,7 +61,11 @@ const router = createBrowserRouter([
       // Admin Routes
       {
         path: "allUsers",
-        element: <AllUsers></AllUsers>,
+        element: (
+          <AdminRoute>
+            <AllUsers></AllUsers>
+          </AdminRoute>
+        ),
       },
     ],
   },

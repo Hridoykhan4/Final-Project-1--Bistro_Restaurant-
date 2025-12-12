@@ -5,6 +5,7 @@ const cors = require("cors");
 const app = express();
 const port = process.env.PORT || 5000;
 require("dotenv").config();
+let userCollection;
 const asyncHandler = require("./asyncHandler");
 const errorHandler = require("./errorHandler");
 // MiddleWare
@@ -14,15 +15,33 @@ app.use(errorHandler);
 
 const verifyToken = (req, res, next) => {
   const authorizeHeader = req.headers?.authorization;
-  const token = authorizeHeader.split("Bearer ")[1];
-  if (!authorizeHeader || !token || !authorizeHeader.startsWith("Bearer "))
+
+  if (!authorizeHeader || !authorizeHeader.startsWith("Bearer ")) {
     return res.status(401).send({ message: "Unauthorized Access" });
+  }
+
+  const token = authorizeHeader.split("Bearer ")[1];
 
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
     if (err) return res.status(401).send({ message: "Unauthorized Access" });
     req.decoded = decoded;
     next();
   });
+};
+
+const verifyValidEmail = (req, res, next) => {
+  const email = req?.query?.email || req?.params?.email;
+  if (email !== req.decoded?.email)
+    return res.status(403).send({ message: "Forbidden Access" });
+  next();
+};
+
+const verifyAdmin = async (req, res, next) => {
+  const { email } = req?.decoded;
+  const user = await userCollection.findOne({ email });
+  if (user?.role !== "admin")
+    return res.status(403).send({ message: "Forbidden Access" });
+  next();
 };
 
 /* MongoDB Start */
@@ -41,7 +60,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     const menuCollection = client.db("bistroDB").collection("menu");
-    const userCollection = client.db("bistroDB").collection("users");
+    userCollection = client.db("bistroDB").collection("users");
     const reviewCollection = client.db("bistroDB").collection("reviews");
     const cartCollection = client.db("bistroDB").collection("carts");
 
@@ -56,12 +75,11 @@ async function run() {
     });
 
     /* ______________------JWT------____________ */
-
     /**
      *-------------------------  User Related APIs start----------------
      */
 
-    app.get("/users/admin", verifyToken, async (req, res) => {
+    app.get("/users/admin", verifyToken, verifyValidEmail, async (req, res) => {
       const { email } = req.query;
       const user = await userCollection.findOne({ email });
       res.send({ admin: user?.role === "admin" });
@@ -70,6 +88,7 @@ async function run() {
     app.get(
       "/users",
       verifyToken,
+      verifyAdmin,
       asyncHandler(async (req, res) => {
         res.send(await userCollection.find().toArray());
       })
