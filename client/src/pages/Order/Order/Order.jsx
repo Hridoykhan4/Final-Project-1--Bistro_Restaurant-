@@ -102,7 +102,7 @@ const Order = () => {
               <Tab
                 key={c}
                 className="px-6 py-2 text-lg rounded-lg cursor-pointer capitalize transition
-                           duration-300 hover:bg-gray-100 font-medium"
+                           duration-300  font-medium"
                 selectedClassName="bg-indigo-600 text-white shadow-md"
               >
                 {c}

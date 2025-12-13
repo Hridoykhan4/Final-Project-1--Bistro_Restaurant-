@@ -69,7 +69,7 @@ const ManageItems = () => {
       </div>
 
       {/* Pagination */}
-      <div className="flex items-center gap-4 mt-5">
+      <div className="flex items-center flex-wrap gap-4 mt-5">
         <button className="btn" disabled={page === 1} onClick={handlePrev}>
           Prev
         </button>

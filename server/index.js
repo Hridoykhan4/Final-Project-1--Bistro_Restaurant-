@@ -163,9 +163,11 @@ async function run() {
       })
     );
 
-    app.get('/menu/:id', async(req, res) => {
-      res.send(await menuCollection.findOne({_id: new ObjectId(req.params.id)}))
-    })
+    app.get("/menu/:id", async (req, res) => {
+      res.send(
+        await menuCollection.findOne({ _id: new ObjectId(req.params.id) })
+      );
+    });
 
     app.post(
       "/menu",
@@ -177,9 +179,26 @@ async function run() {
       })
     );
 
+    app.patch(
+      "/menu/:id",
+      verifyToken,
+      verifyAdmin,
+      asyncHandler(async (req, res) => {
+        const { _id, ...rest } = req.body;
+        res.send(
+          await menuCollection.updateOne(
+            { _id: new ObjectId(req.params.id) },
+            { $set: rest }
+          )
+        );
+      })
+    );
+
     app.delete("/menu/:id", verifyToken, verifyAdmin, async (req, res) => {
       await cartCollection.deleteMany({ menuId: req.params.id });
-      res.send(await menuCollection.deleteOne({ _id: new ObjectId(req.params.id) }));
+      res.send(
+        await menuCollection.deleteOne({ _id: new ObjectId(req.params.id) })
+      );
     });
 
     // app.post('')

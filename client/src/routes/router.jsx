@@ -12,9 +12,9 @@ import Dashboard from "../layout/Dashboard";
 import Cart from "../pages/Dashboard/Customer/Cart/Cart";
 import AllUsers from "../pages/Dashboard/Admin/AllUsers/AllUsers";
 import AdminRoute from "./AdminRoute";
-import AddItems from "../pages/Dashboard/Admin/AddItems/AddItems";
 import ManageItems from "../pages/Dashboard/Admin/ManageItems/ManageItems";
-import UpdateItems from "../pages/Dashboard/Admin/UpdateItems/UpdateItems";
+import ItemFormPage from "../components/ItemFormPage/ItemFormPage";
+import Payment from "../pages/Dashboard/Customer/Payment/Payment";
 
 const router = createBrowserRouter([
   {
@@ -60,7 +60,10 @@ const router = createBrowserRouter([
         path: "cart",
         element: <Cart></Cart>,
       },
-
+      {
+        path: 'payment',
+        element: <Payment></Payment>
+      },
       // Admin Routes
       {
         path: "allUsers",
@@ -73,7 +76,7 @@ const router = createBrowserRouter([
       {
         path: "addItems",
         element: <AdminRoute>
-            <AddItems></AddItems>
+            <ItemFormPage mode="add"></ItemFormPage>
           </AdminRoute>
       },
       {
@@ -85,7 +88,7 @@ const router = createBrowserRouter([
       {
         path: 'updateItems/:id',
         element: <AdminRoute>
-          <UpdateItems></UpdateItems>
+          <ItemFormPage mode="update"></ItemFormPage>
         </AdminRoute>
       }
     ],

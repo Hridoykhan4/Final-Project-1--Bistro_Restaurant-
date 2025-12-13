@@ -1,13 +1,26 @@
+import { useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { FaUtensils } from "react-icons/fa";
 
-const ReusableForm = ({ onSubmit, defaultValues = {}, uploading, buttonLabel="Add Item" }) => {
+const ReusableForm = ({
+  onSubmit,
+  defaultValues = {},
+  defaultImage = null,
+  uploading,
+  buttonLabel = "Add Item",
+}) => {
+  const [previewImage, setPreviewImage] = useState(defaultImage);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm({defaultValues});
+  } = useForm({ defaultValues });
+  useEffect(() => {
+    reset(defaultValues);
+  }, [reset, defaultValues]);
 
   const submitHandler = (data) => {
     onSubmit(data, reset);
@@ -82,34 +95,48 @@ const ReusableForm = ({ onSubmit, defaultValues = {}, uploading, buttonLabel="Ad
           placeholder="Recipe Details"
         ></textarea>
       </label>
-      <label className="form-control w-full md:col-span-2">
+      <label className="form-control w-full md:col-span-2 flex flex-col md:flex-row items-center gap-4">
         <input
           {...register("image", {
-            required: `Image is required`,
+            required: !defaultImage ? "Image is required" : false,
             validate: {
               checkFileType: (value) => {
-                const file = value[0];
-                if (!file) return `Image is required`;
-
+                if (!value[0] && !defaultImage) return "Image is required";
+                if (!value[0]) return true;
                 const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
                 return (
-                  allowedTypes.includes(file.type) ||
+                  allowedTypes.includes(value[0].type) ||
                   "Only JPG, PNG or WEBP images are allowed"
                 );
               },
               checkFileSize: (value) => {
-                const file = value[0];
-                if (!file) return `Image is required`;
+                if (!value[0]) return true;
                 const maxSize = 2 * 1024 * 1024;
-                return file.size <= maxSize || "Image must be less than 2MB";
+                return (
+                  value[0].size <= maxSize || "Image must be less than 2MB"
+                );
               },
             },
           })}
           type="file"
           accept="image/png, image/jpeg, image/webp"
           className="file-input file-input-bordered w-full max-w-xs"
+          onChange={(e) => {
+            const file = e.target.files[0];
+            if (file) {
+              setPreviewImage(URL.createObjectURL(file));
+            }
+          }}
         />
+        {previewImage && (
+          <img
+            src={previewImage}
+            alt="Current"
+            className="w-24 h-24 object-cover rounded-full"
+          />
+        )}
       </label>
+
       {errors?.image && (
         <span className="text-red-600 ">{errors?.image?.message}</span>
       )}
@@ -123,7 +150,7 @@ const ReusableForm = ({ onSubmit, defaultValues = {}, uploading, buttonLabel="Ad
             : "bg-linear-to-r to-[#835D23] from-[#B58130]"
         } text-white  cursor-pointer   max-w-36`}
       >
-        {uploading ? "Uploading..." :  buttonLabel}
+        {uploading ? "Uploading..." : buttonLabel}
         <FaUtensils />
       </button>
     </form>
