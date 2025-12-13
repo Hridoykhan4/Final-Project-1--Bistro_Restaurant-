@@ -7,7 +7,6 @@ import Contact from "../pages/Contact/Contact/Contact";
 import Login from "../pages/Login/Login";
 import SignUp from "../pages/SignUp/SignUp";
 import PrivateRoute from "./PrivateRoute";
-import Secret from "../pages/Shared/Secret/Secret";
 import Dashboard from "../layout/Dashboard";
 import Cart from "../pages/Dashboard/Customer/Cart/Cart";
 import AllUsers from "../pages/Dashboard/Admin/AllUsers/AllUsers";
@@ -15,6 +14,8 @@ import AdminRoute from "./AdminRoute";
 import ManageItems from "../pages/Dashboard/Admin/ManageItems/ManageItems";
 import ItemFormPage from "../components/ItemFormPage/ItemFormPage";
 import Payment from "../pages/Dashboard/Customer/Payment/Payment";
+import PaymentHistory from "../pages/Dashboard/Customer/PaymentHistory/PaymentHistory";
+import OrderItems from "../pages/Dashboard/Customer/PaymentHistory/OrderItems";
 
 const router = createBrowserRouter([
   {
@@ -37,15 +38,6 @@ const router = createBrowserRouter([
         path: "/contact",
         element: <Contact></Contact>,
       },
-
-      {
-        path: "/secret",
-        element: (
-          <PrivateRoute>
-            <Secret></Secret>
-          </PrivateRoute>
-        ),
-      },
     ],
   },
   {
@@ -61,8 +53,18 @@ const router = createBrowserRouter([
         element: <Cart></Cart>,
       },
       {
-        path: 'payment',
-        element: <Payment></Payment>
+        path: "payment",
+        element: <Payment></Payment>,
+      },
+      {
+        path: "payment_history",
+        element: <PaymentHistory></PaymentHistory>,
+        children: [
+          {
+            path: "menuIds",
+            element: <OrderItems></OrderItems>,
+          },
+        ],
       },
       // Admin Routes
       {
@@ -75,22 +77,28 @@ const router = createBrowserRouter([
       },
       {
         path: "addItems",
-        element: <AdminRoute>
+        element: (
+          <AdminRoute>
             <ItemFormPage mode="add"></ItemFormPage>
           </AdminRoute>
+        ),
       },
       {
-        path: 'manageItems',
-        element: <AdminRoute>
-          <ManageItems></ManageItems>
-        </AdminRoute>
+        path: "manageItems",
+        element: (
+          <AdminRoute>
+            <ManageItems></ManageItems>
+          </AdminRoute>
+        ),
       },
       {
-        path: 'updateItems/:id',
-        element: <AdminRoute>
-          <ItemFormPage mode="update"></ItemFormPage>
-        </AdminRoute>
-      }
+        path: "updateItems/:id",
+        element: (
+          <AdminRoute>
+            <ItemFormPage mode="update"></ItemFormPage>
+          </AdminRoute>
+        ),
+      },
     ],
   },
   {

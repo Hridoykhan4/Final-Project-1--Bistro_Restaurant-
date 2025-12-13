@@ -4,6 +4,7 @@ import {
   FaFirstOrder,
   FaHome,
   FaList,
+  FaPaypal,
   FaShoppingCart,
   FaStarAndCrescent,
   FaUser,
@@ -103,9 +104,9 @@ const Dashboard = () => {
               className={({ isActive }) =>
                 `${navLinkBase} ${isActive ? navLinkActive : navLinkDefault}`
               }
-              to="/dashboard/reservation"
+              to="/dashboard/cart"
             >
-              <FaCalendar /> Reservation
+              <FaShoppingCart /> My Cart ({cart?.length || 0})
             </NavLink>
           </li>
           <li>
@@ -113,11 +114,26 @@ const Dashboard = () => {
               className={({ isActive }) =>
                 `${navLinkBase} ${isActive ? navLinkActive : navLinkDefault}`
               }
-              to="/dashboard/cart"
+              to="/dashboard/reservation"
             >
-              <FaShoppingCart /> My Cart ({cart?.length || 0})
+              <FaCalendar /> Reservation
             </NavLink>
           </li>
+
+              
+          <li>
+            <NavLink
+              className={({ isActive }) =>
+                `${navLinkBase} ${isActive ? navLinkActive : navLinkDefault}`
+              }
+              to="/dashboard/payment_history"
+            >
+              <FaPaypal /> Payment History
+            </NavLink>
+          </li>
+
+
+
           <li>
             <NavLink
               className={({ isActive }) =>
